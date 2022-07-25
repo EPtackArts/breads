@@ -19,6 +19,14 @@ app.route('/search', (req,res) => {
     console.log(req.query)
 })
 
+//MIDDLEWARE
+app.use(express.static('public'))
+
+// 404 Page
+app.get('*', (req, res) => {
+    res.send('404')
+  })
+
 app.listen(PORT, () => {
     console.log(`listening on ${PORT}`)
 })
