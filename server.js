@@ -20,6 +20,7 @@ app.route('/search', (req,res) => {
 })
 
 //MIDDLEWARE
+app.use(express.urlencoded({extended:true}))
 app.use(express.static('public'))
 
 // 404 Page
