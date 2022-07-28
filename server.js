@@ -1,33 +1,34 @@
+// DEPENDENCIES
 const express = require('express')
-require('dotenv').config()
+const methodOverride = require('method-override')
 
-let PORT = process.env.PORT
+// CONFIGURATION
+require('dotenv').config()
+const PORT = process.env.PORT
 const app = express()
 
-app.set('views', __dirname + '/views')
+// MIDDLEWARE
+app.use(methodOverride('_method'))
+app.use(express.urlencoded({extended: true}))
+app.use(express.static('public'))
 app.set('view engine', 'jsx')
 app.engine('jsx', require('express-react-views').createEngine())
 
+// ROUTES
 app.get('/', (req, res) => {
-    res.send('Welcome to an awesome app about breads!')
+  res.send('Welcome to an awesome App about Breads')
 })
 
-const breadsController = require("./controllers/breads_controller.js")
+// Breads
+const breadsController = require('./controllers/breads_controller.js')
 app.use('/breads', breadsController)
-
-app.route('/search', (req,res) => {
-    console.log(req.query)
-})
-
-//MIDDLEWARE
-app.use(express.urlencoded({extended:true}))
-app.use(express.static('public'))
 
 // 404 Page
 app.get('*', (req, res) => {
-    res.send('404')
-  })
+  res.send('404')
+})
 
+// LISTEN
 app.listen(PORT, () => {
-    console.log(`listening on ${PORT}`)
+  console.log('nomming at port', PORT);
 })
