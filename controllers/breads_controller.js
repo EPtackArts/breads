@@ -107,4 +107,27 @@ breads.get('/data/seed', (req, res) => {
   })
 })
 
+//Delete All
+// breads.delete('/burnt_toast', (req, res) => {
+//   Bread.findByIdAndDelete()
+//     .then(foundBreads => {
+//       Bread.deleteMany(foundBreads.forEach(element => console.log(element)))
+//     })
+// })
+// breads.delete('/:id', (req, res)=> {
+//   Bread.findByIdAndDelete(req.params.id)
+//   .then(deletedBread => {
+//     res.status(303).redirect('/breads')
+//   })
+// })
+// breads.get('/', (req,res) => {
+//   Bread.find()
+//     .then(foundBreads => {
+//       res.render('index', {
+//         breads: foundBreads,
+//         title: 'Index Page'
+//       })
+//     })
+// })
+
 module.exports = breads
