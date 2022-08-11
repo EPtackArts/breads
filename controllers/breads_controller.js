@@ -1,45 +1,60 @@
 const express = require('express')
-const nodemon = require('nodemon')
 const breads = express.Router()
 const Bread = require('../models/bread.js')
+const Baker = require('../models/baker.js')
 
 //INDEX
 breads.get('/', (req,res) => {
-  Bread.find()
+  Baker.find()
+  .then(foundBakers => {
+    Bread.find()
     .then(foundBreads => {
       res.render('index', {
         breads: foundBreads,
         title: 'Index Page'
       })
     })
+  })
+  
 })
 
 // NEW
 breads.get('/new', (req, res) => {
-  res.render('new')
+  Baker.find()
+    .then(foundBakers => {
+      res.render('new', {
+        bakers: foundBakers
+      })
+    })
 })
 
 // EDIT
 breads.get('/:id/edit', (req, res) => {
-  Bread.findById(req.params.id)
-  .then(foundBread => {
-    res.render('edit', {
-      bread: foundBread
+  Baker.find()
+    .then(foundBakers => {
+        Bread.findById(req.params.id)
+          .then(foundBread => {
+            res.render('edit', {
+                bread: foundBread, 
+                bakers: foundBakers 
+            })
+          })
     })
-  })
 })
 
 // SHOW
 breads.get('/:id', (req, res) => {
   Bread.findById(req.params.id)
-  .then(foundBread => {
-    res.render('show', {
-      bread: foundBread
-    })
-  })
-  .catch(err => {
-    res.send('404')
-  })
+      .populate('baker')
+      .then(foundBread => {
+        const bakedBy = foundBread.getBakedBy()
+        res.render('show', {
+            bread: foundBread
+        })
+      })
+      .catch(err => {
+        res.send('404')
+      })
 })
 
 // CREATE
@@ -63,19 +78,19 @@ breads.put('/:id', (req, res) => {
   } else {
     req.body.hasGluten = false
   }
-  Bread.findByIdAndUpdate(req.params.id, req.body, { new:true })
-  .then(updatedBread => {
-    console.log(updatedBread)
-    res.redirect(`/breads/${req.params.id}`)
-  })
+  Bread.findByIdAndUpdate(req.params.id, req.body, { new: true }) 
+    .then(updatedBread => {
+      console.log(updatedBread) 
+      res.redirect(`/breads/${req.params.id}`) 
+    })
 })
 
-//DELETE
-breads.delete('/:id', (req, res)=> {
-  Bread.findByIdAndDelete(req.params.id)
-  .then(deletedBread => {
-    res.status(303).redirect('/breads')
-  })
+// DELETE
+breads.delete('/:id', (req, res) => {
+  Bread.findByIdAndDelete(req.params.id) 
+    .then(deletedBread => { 
+      res.status(303).redirect('/breads')
+    })
 })
 
 //Insert Many Bonus
