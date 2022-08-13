@@ -1,5 +1,5 @@
 const React = require('react')
-const bread = require('../models/bread.js')s
+const bread = require('../models/bread.js')
 const Default = require('./layouts/Default')
 
 function Edit ({bread, bakers}) {
